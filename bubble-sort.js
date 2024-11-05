@@ -62,11 +62,15 @@ function startVisualization() {
 function drawArray(array, highlightIndex1 = -1, highlightIndex2 = -1) {
     const width = canvas.width / array.length;
     const maxHeight = canvas.height;
+    
+    // Find the absolute maximum value in the array
+    const maxAbsValue = Math.max(...array.map(Math.abs));
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     array.forEach((value, index) => {
-        const height = (value / Math.max(...array)) * maxHeight;
+        // Calculate height based on the absolute value of the element
+        const height = (Math.abs(value) / maxAbsValue) * maxHeight;
         const x = index * width;
         const y = maxHeight - height;
 
@@ -81,6 +85,11 @@ function drawArray(array, highlightIndex1 = -1, highlightIndex2 = -1) {
         // Draw the value of the array above the corresponding bar
         ctx.fillStyle = "black"; // Color for the text
         ctx.fillText(value, x + (width / 2) - 10, y - 5); // Adjust text position
+
+        // Draw negative values below the bar
+        if (value < 0) {
+            ctx.fillText(value, x + (width / 2) - 10, y + height + 15); // Position text below the bar for negative values
+        }
     });
 }
 
