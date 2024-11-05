@@ -33,7 +33,6 @@
     <!-- Header -->
     <header class="header text-center my-4">
         <h1>Bubble Sort Visualization</h1>
-        <a href="sorting.html" class="btn btn-secondary">← Back to Algorithm List</a>
     </header>
 
     <main class="visualization-container container flex-grow-1">
@@ -44,7 +43,9 @@
             <label for="speed" class="ms-3">Speed:</label>
             <input type="range" id="speed" min="1" max="10" value="5" oninput="updateSpeed(this.value)" class="ms-2">
         </div>
-        <canvas id="visualizationCanvas" width="800" height="400" class="border"></canvas>
+        <div class="control-panel text-center mb-4">
+          <canvas id="visualizationCanvas" width="400" height="200" class="border"></canvas>  
+        </div>
     </main>
 
     <!-- Footer -->
