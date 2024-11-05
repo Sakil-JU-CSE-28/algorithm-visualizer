@@ -63,14 +63,15 @@ function drawArray(array, highlightIndex1 = -1, highlightIndex2 = -1) {
     const width = canvas.width / array.length;
     const maxHeight = canvas.height;
 
-    // Find the absolute maximum value in the array
+    // Find the maximum value in the array
+    const maxValue = Math.max(...array);
     const maxAbsValue = Math.max(...array.map(Math.abs));
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     array.forEach((value, index) => {
-        // Calculate height based on the absolute value of the element
-        const height = (Math.abs(value) / maxAbsValue) * maxHeight;
+        // Calculate height based on the positive value only
+        const height = value >= 0 ? (value / maxAbsValue) * maxHeight : 0;
         const x = index * width;
         const y = maxHeight - height;
 
@@ -86,22 +87,23 @@ function drawArray(array, highlightIndex1 = -1, highlightIndex2 = -1) {
             ctx.fillRect(x, y, width - 1, height); // Draw the bar for positive values
         }
 
-        // Draw the value of the array above the corresponding bar
+        // Draw the value of the array above the corresponding bar for positive values
         ctx.fillStyle = "black"; // Color for the text
         ctx.fillText(value, x + (width / 2) - 10, y - 5); // Position text above the bar for positive values
 
         // Draw negative values without a bar, only show the value
         if (value < 0) {
-            ctx.fillText(value, x + (width / 2) - 10, maxHeight - 10); // Position text below the bar for negative values
+            ctx.fillText(value, x + (width / 2) - 10, maxHeight - 10); // Position text below the canvas for negative values
         }
     });
 
     // Label the highest value on the graph
-    const maxIndex = array.indexOf(Math.max(...array));
-    const maxValue = array[maxIndex];
-    const maxHeightPosition = (Math.abs(maxValue) / maxAbsValue) * maxHeight;
-    ctx.fillStyle = "green"; // Color for the max value label
-    ctx.fillText(maxValue, maxIndex * width + (width / 2) - 10, maxHeight - maxHeightPosition - 10); // Position above the bar
+    if (maxValue >= 0) {
+        const maxIndex = array.indexOf(maxValue);
+        const maxHeightPosition = (maxValue / maxAbsValue) * maxHeight;
+        ctx.fillStyle = "green"; // Color for the max value label
+        ctx.fillText(maxValue, maxIndex * width + (width / 2) - 10, maxHeight - maxHeightPosition - 10); // Position above the bar
+    }
 }
 
 // Function to pause the visualization
