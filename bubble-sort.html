@@ -7,17 +7,16 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+    <header class="header">
         <h1>Bubble Sort Visualization</h1>
-        <p>See how Bubble Sort works step-by-step!</p>
         <a href="index.html" class="back-link">← Back to Algorithm List</a>
     </header>
 
-    <main>
+    <main class="visualization-container">
         <div class="control-panel">
-            <button onclick="startVisualization()">Start</button>
-            <button onclick="pauseVisualization()">Pause</button>
-            <button onclick="resetVisualization()">Reset</button>
+            <button onclick="startVisualization()" class="control-button">Start</button>
+            <button onclick="pauseVisualization()" class="control-button">Pause</button>
+            <button onclick="resetVisualization()" class="control-button">Reset</button>
             <label for="speed">Speed:</label>
             <input type="range" id="speed" min="1" max="10" value="5" oninput="updateSpeed(this.value)">
         </div>
