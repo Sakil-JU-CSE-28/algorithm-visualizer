@@ -4,57 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bubble Sort Visualization</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="ace.css">
+    <style>
+        #editor { 
+            height: 200px; 
+            width: 100%; 
+        }
+        #visualizationCanvas {
+            margin-top: 20px;
+        }
+    </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">Algorithm Visualizer</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="sorting.html">Sorting</a></li>
-                    <li class="nav-item"><a class="nav-link" href="searching.html">Searching</a></li>
-                    <li class="nav-item"><a class="nav-link" href="graph.html">Graph</a></li>
-                </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search algorithms..." aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Header -->
-    <header class="header text-center my-4">
+<body>
+    <header class="header">
         <h1>Bubble Sort Visualization</h1>
+        <a href="index.html" class="back-link">← Back to Algorithm List</a>
     </header>
 
-    <main class="visualization-container container flex-grow-1">
-        <div class="control-panel text-center mb-4">
-            <input type="text" id="inputArray" placeholder="Enter numbers separated by commas">
-            <button onclick="startVisualization()" class="btn btn-success">Start</button>
-            <button onclick="pauseVisualization()" class="btn btn-warning">Pause</button>
-            <button onclick="resetVisualization()" class="btn btn-danger">Reset</button>
-            <label for="speed" class="ms-3">Speed:</label>
-            <input type="range" id="speed" min="1" max="10" value="5" oninput="updateSpeed(this.value)" class="ms-2">
+    <main class="visualization-container">
+        <div class="control-panel">
+            <button onclick="startVisualization()" class="control-button">Start</button>
+            <button onclick="pauseVisualization()" class="control-button">Pause</button>
+            <button onclick="resetVisualization()" class="control-button">Reset</button>
+            <label for="speed">Speed:</label>
+            <input type="range" id="speed" min="1" max="10" value="5" oninput="updateSpeed(this.value)">
         </div>
-        <div class="control-panel text-center mb-4">
-          <canvas id="visualizationCanvas" width="800" height="400" class="border"></canvas>  
-        </div>
+        
+        <div id="editor">function bubbleSort(arr) {
+    // Your sorting algorithm here
+    for (let i = 0; i < arr.length - 1; i++) {
+        for (let j = 0; j < arr.length - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                let temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+    return arr;
+}</div>
+        
+        <input type="text" id="inputArray" placeholder="Enter numbers separated by commas" />
+        <button onclick="runUserAlgorithm()" class="control-button">Run Algorithm</button>
+        
+        <canvas id="visualizationCanvas" width="800" height="400"></canvas>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer bg-primary text-white text-center py-3 mt-auto">
+    <footer class="footer">
         <p>© 2024 Algorithm Visualizer | Created by Md. Sakil Ahmed</p>
     </footer>
 
+    <script src="ace.js"></script>
     <script src="bubble-sort.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize Ace Editor
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/javascript");
+
+        // Function to run user's algorithm
+        function runUserAlgorithm() {
+            const input = document.getElementById("inputArray").value;
+            if (input.trim() === "") {
+                alert("Please enter some numbers.");
+                return;
+            }
+
+            const numbers = input.split(",").map(num => parseInt(num.trim())).filter(num => !isNaN(num));
+
+            if (numbers.length === 0) {
+                alert("Please enter valid numbers.");
+                return;
+            }
+
+            // Retrieve user code from the editor
+            const userCode = editor.getValue();
+
+            // Create a new function from user code
+            const userSort = new Function('arr', userCode);
+
+            // Execute user's sorting algorithm
+            try {
+                userSort(numbers);
+                drawArray(numbers);
+            } catch (error) {
+                alert("Error in your algorithm: " + error.message);
+            }
+        }
+
+        // Visualization function for drawing the array
+        function drawArray(array) {
+            const canvas = document.getElementById("visualizationCanvas");
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const width = canvas.width / array.length;
+            const maxHeight = canvas.height;
+            const maxAbsValue = Math.max(...array.map(Math.abs));
+
+            array.forEach((value, index) => {
+                const height = value >= 0 ? (value / maxAbsValue) * maxHeight : 0;
+                const x = index * width;
+                const y = maxHeight - height;
+
+                ctx.fillStyle = value >= 0 ? "blue" : "gray"; // Color based on positivity
+                ctx.fillRect(x, y, width - 1, height);
+
+                // Draw the value of the array above the corresponding bar for positive values
+                ctx.fillStyle = "black"; // Color for the text
+                ctx.fillText(value, x + (width / 2) - 10, y - 5);
+            });
+        }
+    </script>
 </body>
 </html>
