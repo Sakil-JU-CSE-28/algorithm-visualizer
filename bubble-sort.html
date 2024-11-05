@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Sort Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Bubble Sort Visualization</h1>
+        <p>See how Bubble Sort works step-by-step!</p>
+        <a href="index.html" class="back-link">← Back to Algorithm List</a>
+    </header>
+
+    <main>
+        <div class="control-panel">
+            <button onclick="startVisualization()">Start</button>
+            <button onclick="pauseVisualization()">Pause</button>
+            <button onclick="resetVisualization()">Reset</button>
+            <label for="speed">Speed:</label>
+            <input type="range" id="speed" min="1" max="10" value="5" oninput="updateSpeed(this.value)">
+        </div>
+        <canvas id="visualizationCanvas" width="800" height="400"></canvas>
+    </main>
+
+    <script src="bubble-sort.js"></script>
+</body>
+</html>
