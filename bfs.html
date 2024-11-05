@@ -50,9 +50,15 @@
         <h2 class="text-center">Breadth-First Search (BFS) Visualization</h2>
         <p class="text-center">Select a starting node and click "Start BFS" to begin the visualization.</p>
 
-        <div class="text-center">
+        <div class="text-center mb-3">
             <input type="number" id="startNode" class="form-control w-25 d-inline-block" placeholder="Enter starting node (0-5)">
             <button class="btn btn-primary" onclick="startBFS()">Start BFS</button>
+        </div>
+
+        <!-- Node Visitation List -->
+        <div class="text-center">
+            <h4>Node Visitation Order</h4>
+            <ul id="nodeList" class="list-group w-50 mx-auto"></ul>
         </div>
 
         <!-- Visualization Canvas -->
@@ -90,6 +96,7 @@
 
         // Colors for each level
         const levelColors = ["blue", "green", "orange", "purple", "red", "brown"];
+        const visitedColors = {}; // To store permanent colors for visited nodes
 
         // Function to draw nodes
         function drawNode(node, color = "blue") {
@@ -121,7 +128,10 @@
         function drawGraph() {
             clearCanvas();
             edges.forEach(drawEdge);
-            nodes.forEach(node => drawNode(node));
+            nodes.forEach(node => {
+                const color = visitedColors[node.id] || "blue";
+                drawNode(node, color);
+            });
         }
 
         // BFS algorithm with visualization and level coloring
@@ -130,13 +140,24 @@
             const queue = [[startNode, 0]];  // Queue stores nodes with their levels
             visited.add(startNode);
 
+            // Clear and update node list
+            const nodeList = document.getElementById("nodeList");
+            nodeList.innerHTML = "";
+
             while (queue.length > 0) {
                 const [currentNode, level] = queue.shift();
-                drawGraph();
-
-                // Highlight the current node with color based on its level
                 const color = levelColors[level % levelColors.length];
+                visitedColors[currentNode] = color; // Store color for permanent use
+                drawGraph();
                 drawNode(nodes[currentNode], color);
+
+                // Append to node list with color for visualization
+                const listItem = document.createElement("li");
+                listItem.className = "list-group-item";
+                listItem.style.color = color;
+                listItem.innerText = `Node ${currentNode} (Level ${level})`;
+                nodeList.appendChild(listItem);
+
                 await new Promise(resolve => setTimeout(resolve, 1000)); // Delay for visualization
 
                 // Explore neighbors
