@@ -1,30 +1,50 @@
-const canvas = document.getElementById("visualizationCanvas");
-const ctx = canvas.getContext("2d");
-let isRunning = false;
+let canvas = document.getElementById("visualizationCanvas");
+let ctx = canvas.getContext("2d");
+let numbers = [];
+let isSorting = false;
 let speed = 5;
-let array = [30, 100, 60, 10, 80, 40, 90, 70, 20, 50];
+let interval;
 
-function renderArray(array) {
+// Function to start the bubble sort visualization
+function startVisualization() {
+    const input = document.getElementById("inputArray").value;
+    if (input.trim() === "") {
+        alert("Please enter some numbers.");
+        return;
+    }
+    
+    // Convert the input string into an array of numbers
+    numbers = input.split(",").map(num => parseInt(num.trim())).filter(num => !isNaN(num));
+
+    if (numbers.length === 0) {
+        alert("Please enter valid numbers.");
+        return;
+    }
+
+    isSorting = true;
+    const arrayLength = numbers.length;
+
+    // Reset the visualization on the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    array.forEach((value, index) => {
-        ctx.fillStyle = "#4a90e2";
-        ctx.fillRect(index * 20, canvas.height - value, 18, value);
-    });
-}
+    drawArray(numbers);
 
-function bubbleSortVisualize(array) {
+    // Create a copy of the array to sort
+    let arr = [...numbers];
+
     let i = 0;
     let j = 0;
-    const interval = setInterval(() => {
-        if (!isRunning) {
-            clearInterval(interval);
-            return;
-        }
-        if (i < array.length) {
-            if (j < array.length - i - 1) {
-                if (array[j] > array[j + 1]) {
-                    [array[j], array[j + 1]] = [array[j + 1], array[j]];
-                    renderArray(array);
+
+    interval = setInterval(() => {
+        if (i < arrayLength) {
+            if (j < arrayLength - i - 1) {
+                if (arr[j] > arr[j + 1]) {
+                    // Swap the elements
+                    let temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+
+                    // Redraw the array after swapping
+                    drawArray(arr, j, j + 1);
                 }
                 j++;
             } else {
@@ -33,31 +53,53 @@ function bubbleSortVisualize(array) {
             }
         } else {
             clearInterval(interval);
-            isRunning = false;
+            isSorting = false;
         }
-    }, 500 / speed);
+    }, 1000 / speed); // Adjust speed of sorting
 }
 
-function startVisualization() {
-    if (!isRunning) {
-        isRunning = true;
-        bubbleSortVisualize(array);
+// Function to draw the array on the canvas
+function drawArray(array, highlightIndex1 = -1, highlightIndex2 = -1) {
+    const width = canvas.width / array.length;
+    const maxHeight = canvas.height;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    array.forEach((value, index) => {
+        const height = (value / Math.max(...array)) * maxHeight;
+        const x = index * width;
+        const y = maxHeight - height;
+
+        // Set color based on whether the bar is being compared or swapped
+        if (index === highlightIndex1 || index === highlightIndex2) {
+            ctx.fillStyle = "red"; // Highlight color for current comparison
+        } else {
+            ctx.fillStyle = "blue"; // Normal color
+        }
+        ctx.fillRect(x, y, width - 1, height);
+    });
+}
+
+// Function to pause the visualization
+function pauseVisualization() {
+    if (isSorting) {
+        clearInterval(interval);
+        isSorting = false;
     }
 }
 
-function pauseVisualization() {
-    isRunning = false;
-}
-
+// Function to reset the visualization
 function resetVisualization() {
-    isRunning = false;
-    array = [30, 100, 60, 10, 80, 40, 90, 70, 20, 50];
-    renderArray(array);
+    clearInterval(interval);
+    isSorting = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+// Function to update the speed
 function updateSpeed(value) {
     speed = value;
+    if (isSorting) {
+        clearInterval(interval);
+        startVisualization(); // Restart visualization with the new speed
+    }
 }
-
-// Initial render
-renderArray(array);
