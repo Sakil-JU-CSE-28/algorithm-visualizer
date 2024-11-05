@@ -168,12 +168,20 @@ function merge(left, right) {
             }
 
             const userCode = editor.getValue();
-            const userSort = new Function('arr', userCode); // Create a new function from user code
+            let userSort;
+
+            // Create a new function from user code
+            try {
+                userSort = new Function('arr', userCode + "\nreturn arr;"); // Added return statement
+            } catch (error) {
+                alert("Error in user code: " + error.message);
+                return;
+            }
 
             // Execute user's sorting algorithm
             try {
-                userSort(numbers);
-                drawArray(numbers);
+                const sortedArray = userSort(numbers); // Execute the function
+                drawArray(sortedArray);
             } catch (error) {
                 alert("Error in your algorithm: " + error.message);
             }
