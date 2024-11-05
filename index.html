@@ -58,29 +58,19 @@
             </select>
         </div>
 
-        <!-- Code Editor -->
-        <div id="editor">function bubbleSort(arr) {
-    for (let i = 0; i < arr.length - 1; i++) {
-        for (let j = 0; j < arr.length - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                let temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
-    return arr;
-}</div>
-       <div>
-            <!-- Visualization Canvas -->
-          <canvas id="visualizationCanvas" width="800" height="400"></canvas>
-           <div>
-           <button onclick="runUserAlgorithm()" class="btn btn-primary my-3">Run Algorithm</button>
-           </div>
-       </div>
+        <!-- Code Editor and Run Section -->
+        <div class="row">
+            <div class="col-md-6">
+                <div id="editor"></div>
+            </div>
+            <div class="col-md-6">
+                <canvas id="visualizationCanvas" width="400" height="300"></canvas>
+                <div>
+                    <button onclick="runUserAlgorithm()" class="btn btn-primary my-3">Run Algorithm</button>
+                </div>
+            </div>
+        </div>
         
-        
-       
     </main>
 
     <!-- Footer -->
