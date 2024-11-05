@@ -80,15 +80,19 @@ function drawArray(array, highlightIndex1 = -1, highlightIndex2 = -1) {
         } else {
             ctx.fillStyle = "blue"; // Normal color
         }
-        ctx.fillRect(x, y, width - 1, height);
+
+        // Draw bars only for non-negative values
+        if (value >= 0) {
+            ctx.fillRect(x, y, width - 1, height); // Draw the bar for positive values
+        }
 
         // Draw the value of the array above the corresponding bar
         ctx.fillStyle = "black"; // Color for the text
         ctx.fillText(value, x + (width / 2) - 10, y - 5); // Position text above the bar for positive values
 
-        // Draw negative values below the bar
+        // Draw negative values without a bar, only show the value
         if (value < 0) {
-            ctx.fillText(value, x + (width / 2) - 10, maxHeight - (height + 10)); // Position text below the bar for negative values
+            ctx.fillText(value, x + (width / 2) - 10, maxHeight - 10); // Position text below the bar for negative values
         }
     });
 
