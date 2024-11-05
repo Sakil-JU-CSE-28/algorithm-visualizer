@@ -62,7 +62,7 @@ function startVisualization() {
 function drawArray(array, highlightIndex1 = -1, highlightIndex2 = -1) {
     const width = canvas.width / array.length;
     const maxHeight = canvas.height;
-    
+
     // Find the absolute maximum value in the array
     const maxAbsValue = Math.max(...array.map(Math.abs));
 
@@ -84,13 +84,20 @@ function drawArray(array, highlightIndex1 = -1, highlightIndex2 = -1) {
 
         // Draw the value of the array above the corresponding bar
         ctx.fillStyle = "black"; // Color for the text
-        ctx.fillText(value, x + (width / 2) - 10, y - 5); // Adjust text position
+        ctx.fillText(value, x + (width / 2) - 10, y - 5); // Position text above the bar for positive values
 
         // Draw negative values below the bar
         if (value < 0) {
-            ctx.fillText(value, x + (width / 2) - 10, y + height + 15); // Position text below the bar for negative values
+            ctx.fillText(value, x + (width / 2) - 10, maxHeight - (height + 10)); // Position text below the bar for negative values
         }
     });
+
+    // Label the highest value on the graph
+    const maxIndex = array.indexOf(Math.max(...array));
+    const maxValue = array[maxIndex];
+    const maxHeightPosition = (Math.abs(maxValue) / maxAbsValue) * maxHeight;
+    ctx.fillStyle = "green"; // Color for the max value label
+    ctx.fillText(maxValue, maxIndex * width + (width / 2) - 10, maxHeight - maxHeightPosition - 10); // Position above the bar
 }
 
 // Function to pause the visualization
