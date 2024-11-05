@@ -49,7 +49,7 @@
         
         <!-- Algorithm Selection -->
         <div class="my-4">
-            <label for="algorithmSelect" class="form-label">Select Algorithm:</label>
+            <label for="algorithmSelect" class="form-label">Select And Code Your Algorithm For Visualize:</label>
             <select id="algorithmSelect" class="form-select" onchange="loadAlgorithm()">
                 <option value="">Choose an algorithm...</option>
                 <option value="bubbleSort">Bubble Sort</option>
@@ -71,11 +71,16 @@
     }
     return arr;
 }</div>
-
-        <button onclick="runUserAlgorithm()" class="btn btn-primary my-3">Run Algorithm</button>
+       <div>
+            <!-- Visualization Canvas -->
+          <canvas id="visualizationCanvas" width="800" height="400"></canvas>
+           <div>
+           <button onclick="runUserAlgorithm()" class="btn btn-primary my-3">Run Algorithm</button>
+           </div>
+       </div>
         
-        <!-- Visualization Canvas -->
-        <canvas id="visualizationCanvas" width="800" height="400"></canvas>
+        
+       
     </main>
 
     <!-- Footer -->
