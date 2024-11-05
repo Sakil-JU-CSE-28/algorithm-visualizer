@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Algorithm Visualizer</h1>
+        <nav>
+            <select id="algorithm-select">
+                <option value="bubbleSort">Bubble Sort</option>
+                <option value="quickSort">Quick Sort</option>
+                <!-- Add more algorithms here -->
+            </select>
+            <button id="start-button">Start</button>
+            <button id="pause-button">Pause</button>
+            <button id="reset-button">Reset</button>
+        </nav>
+    </header>
+
+    <main>
+        <div id="visualization-container">
+            <!-- Visualization will be drawn here -->
+            <canvas id="visualization-canvas"></canvas>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
