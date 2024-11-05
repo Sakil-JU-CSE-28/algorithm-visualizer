@@ -7,7 +7,7 @@ let array = [30, 100, 60, 10, 80, 40, 90, 70, 20, 50];
 function renderArray(array) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     array.forEach((value, index) => {
-        ctx.fillStyle = "#4CAF50";
+        ctx.fillStyle = "#4a90e2";
         ctx.fillRect(index * 20, canvas.height - value, 18, value);
     });
 }
