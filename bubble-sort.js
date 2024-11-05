@@ -12,7 +12,7 @@ function startVisualization() {
         alert("Please enter some numbers.");
         return;
     }
-    
+
     // Convert the input string into an array of numbers
     numbers = input.split(",").map(num => parseInt(num.trim())).filter(num => !isNaN(num));
 
@@ -77,6 +77,10 @@ function drawArray(array, highlightIndex1 = -1, highlightIndex2 = -1) {
             ctx.fillStyle = "blue"; // Normal color
         }
         ctx.fillRect(x, y, width - 1, height);
+
+        // Draw the value of the array above the corresponding bar
+        ctx.fillStyle = "black"; // Color for the text
+        ctx.fillText(value, x + (width / 2) - 10, y - 5); // Adjust text position
     });
 }
 
