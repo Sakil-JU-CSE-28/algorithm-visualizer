@@ -54,13 +54,36 @@
     <main class="container my-5 flex-grow-1 text-center">
         <h2>Welcome to Algorithm Visualizer</h2>
         <p>This site provides interactive visualizations for various algorithms, including sorting, searching, and graph algorithms.</p>
-        <marquee><p class="text-muted"><strong>Latest Updates:</strong> New algorithms added in Sorting and Graph sections!</p></marquee>
+       <div class="scrolling-text">
+    <p class="text-muted"><strong>Latest Updates:</strong> New algorithms added in Sorting and Graph sections!</p>
+</div>
+
+<style>
+.scrolling-text {
+    overflow: hidden;
+    white-space: nowrap;
+    color: green; /* Set text color to green */
+    background-color: #f8f9fa;
+    width: 100%;
+    animation: scroll-left 10s linear infinite;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+</style>
+
         
         <!-- Algorithm Editor and Visualization Canvas -->
         <div class="flex-container">
             <!-- Code Editor -->
             <div>
-                <h5>Code Your Algorithm:</h5>
+                <h5>Code Your Sorting Algorithm:</h5>
                 <div id="editor"></div>
                 <button onclick="runUserAlgorithm()" class="btn btn-primary my-3">Run Algorithm</button>
             </div>
