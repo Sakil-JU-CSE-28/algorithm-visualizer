@@ -55,14 +55,19 @@
             <button class="btn btn-primary" onclick="startBFS()">Start BFS</button>
         </div>
 
-        <!-- Node Visitation List -->
-        <div class="text-center">
-            <h4>Node Visitation Order</h4>
-            <ul id="nodeList" class="list-group w-50 mx-auto"></ul>
-        </div>
+        <!-- Side-by-side layout -->
+        <div class="row">
+            <!-- Visualization Canvas Column -->
+            <div class="col-md-8">
+                <canvas id="visualizationCanvas" width="600" height="400"></canvas>
+            </div>
 
-        <!-- Visualization Canvas -->
-        <canvas id="visualizationCanvas" width="600" height="400"></canvas>
+            <!-- Node Visitation List Column -->
+            <div class="col-md-4">
+                <h4>Node Visitation Order</h4>
+                <ul id="nodeList" class="list-group"></ul>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
