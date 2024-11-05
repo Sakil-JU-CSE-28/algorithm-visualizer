@@ -4,30 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Algorithm Visualizer</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Algorithm Visualizer</h1>
-        <nav>
-            <select id="algorithm-select">
-                <option value="bubbleSort">Bubble Sort</option>
-                <option value="quickSort">Quick Sort</option>
-                <!-- Add more algorithms here -->
-            </select>
-            <button id="start-button">Start</button>
-            <button id="pause-button">Pause</button>
-            <button id="reset-button">Reset</button>
-        </nav>
+    <header class="header">
+        <h1>Welcome to the Algorithm Visualizer</h1>
+        <p>Select an algorithm below to start visualizing!</p>
     </header>
 
-    <main>
-        <div id="visualization-container">
-            <!-- Visualization will be drawn here -->
-            <canvas id="visualization-canvas"></canvas>
+    <main class="algorithm-list">
+        <div class="algorithm-item">
+            <a href="bubble-sort.html">Bubble Sort</a>
         </div>
+        <div class="algorithm-item">
+            <a href="quick-sort.html">Quick Sort</a>
+        </div>
+        <div class="algorithm-item">
+            <a href="merge-sort.html">Merge Sort</a>
+        </div>
+        <!-- Add more algorithms as needed -->
     </main>
 
-    <script src="script.js"></script>
+    <footer>
+        <p>Created with ❤️ for algorithm enthusiasts</p>
+    </footer>
 </body>
 </html>
