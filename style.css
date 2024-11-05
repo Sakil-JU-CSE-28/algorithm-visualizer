@@ -1,9 +1,18 @@
+/* Ensure footer always stays at the bottom */
+html, body {
+    height: 100%; /* Full height for body */
+    margin: 0; /* Remove default margin */
+}
+
 body {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+}
+
+main {
+    flex: 1; /* Allow main content to grow and fill available space */
 }
 
 .footer {
-    margin-top: auto;
+    /* The footer will sit below the content but will be visible at the bottom */
 }
