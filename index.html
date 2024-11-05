@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Algorithm Visualizer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <style>
         #editor { 
             height: 300px; 
@@ -29,42 +28,20 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">Algorithm Visualizer</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="sorting.html">Sorting</a></li>
-                    <li class="nav-item"><a class="nav-link" href="searching.html">Searching</a></li>
-                    <li class="nav-item"><a class="nav-link" href="graph.html">Graph</a></li>
-                </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search algorithms..." aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
-            </div>
+            <a class="navbar-brand" href="#">Algorithm Visualizer</a>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="container my-5 flex-grow-1 text-center">
-        <h2>Welcome to Algorithm Visualizer</h2>
-        <p>This site provides interactive visualizations for various algorithms, including sorting, searching, and graph algorithms.</p>
-        <p class="text-muted"><strong>Latest Updates:</strong> New algorithms added in Sorting and Graph sections!</p>
-        
-        <!-- Algorithm Editor and Visualization Canvas -->
+        <h2>Algorithm Visualizer</h2>
         <div class="flex-container">
-            <!-- Code Editor -->
             <div>
                 <h5>Code Your Algorithm:</h5>
                 <div id="editor"></div>
                 <button onclick="runUserAlgorithm()" class="btn btn-primary my-3">Run Algorithm</button>
             </div>
-            <!-- Visualization Canvas -->
             <div>
                 <h5>Visualization:</h5>
                 <canvas id="visualizationCanvas" width="400" height="400"></canvas>
@@ -72,9 +49,8 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer bg-primary text-white text-center py-3">
-        <p>© 2024 Algorithm Visualizer | Created by Md. Sakil Ahmed</p>
+        <p>© 2024 Algorithm Visualizer</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -109,7 +85,7 @@
 
             // Execute user's sorting algorithm
             try {
-                const sortedArray = await visualizeSorting(numbers, userSort); // Execute the function
+                await visualizeSorting(numbers, userSort); // Execute the function
             } catch (error) {
                 alert("Error in your algorithm: " + error.message);
             }
@@ -123,32 +99,46 @@
             const width = canvas.width / array.length;
             const maxHeight = canvas.height;
 
-            for (let i = 0; i < array.length; i++) {
-                const currentArray = [...array]; // Copy the original array
-                const sortedArray = sortFunction(currentArray); // Sort the array using the user's function
+            // Step visualization wrapper
+            let visualSteps = [];
 
-                for (let j = 0; j < sortedArray.length; j++) {
-                    const height = (sortedArray[j] / Math.max(...array)) * maxHeight;
-                    const x = j * width;
-                    const y = maxHeight - height;
-
-                    // Draw the bar
-                    ctx.fillStyle = "blue"; // Color for the bars
-                    ctx.fillRect(x, y, width - 1, height);
+            // Custom sorting function to capture steps
+            const stepSort = (arr) => {
+                for (let i = 0; i < arr.length; i++) {
+                    for (let j = 0; j < arr.length - i - 1; j++) {
+                        if (arr[j] > arr[j + 1]) {
+                            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]; // Swap
+                        }
+                        visualSteps.push([...arr]); // Capture state after each comparison
+                    }
                 }
+                return arr;
+            };
 
+            // Execute user code with visualization steps
+            const sortedArray = sortFunction(visualSteps.length > 0 ? stepSort(array) : array);
+
+            // Visualize each step
+            for (const step of visualSteps) {
+                drawArray(ctx, step, width, maxHeight);
                 await new Promise(resolve => setTimeout(resolve, 500)); // Pause for visualization effect
                 ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas for the next iteration
             }
 
-            // Final sorted array
-            const finalHeight = sortedArray.map(num => (num / Math.max(...array)) * maxHeight);
-            finalHeight.forEach((height, index) => {
-                const x = index * width;
+            // Final sorted array visualization
+            drawArray(ctx, sortedArray, width, maxHeight, true);
+        }
+
+        function drawArray(ctx, array, barWidth, maxHeight, final = false) {
+            const maxArrayValue = Math.max(...array);
+            for (let i = 0; i < array.length; i++) {
+                const height = (array[i] / maxArrayValue) * maxHeight;
+                const x = i * barWidth;
                 const y = maxHeight - height;
-                ctx.fillStyle = "green"; // Color for the final sorted bars
-                ctx.fillRect(x, y, width - 1, height);
-            });
+
+                ctx.fillStyle = final ? "green" : "blue"; // Color for the final sorted bars
+                ctx.fillRect(x, y, barWidth - 1, height);
+            }
         }
     </script>
 </body>
