@@ -54,7 +54,7 @@
     <main class="container my-5 flex-grow-1 text-center">
         <h2>Welcome to Algorithm Visualizer</h2>
         <p>This site provides interactive visualizations for various algorithms, including sorting, searching, and graph algorithms.</p>
-        <p class="text-muted"><strong>Latest Updates:</strong> New algorithms added in Sorting and Graph sections!</p>
+        <marquee><p class="text-muted"><strong>Latest Updates:</strong> New algorithms added in Sorting and Graph sections!</p></marquee>
         
         <!-- Algorithm Editor and Visualization Canvas -->
         <div class="flex-container">
@@ -123,9 +123,13 @@
             const width = canvas.width / array.length;
             const maxHeight = canvas.height;
 
-            for (let i = 0; i < array.length; i++) {
-                const currentArray = [...array]; // Copy the original array
-                const sortedArray = sortFunction(currentArray); // Sort the array using the user's function
+            // Initialize the array to be sorted
+            let currentArray = [...array];
+
+            // Visualize each step of the sorting
+            for (let i = 0; i < currentArray.length; i++) {
+                // Sort the current array using the user's function
+                const sortedArray = sortFunction(currentArray.slice()); // Clone the array for sorting
 
                 for (let j = 0; j < sortedArray.length; j++) {
                     const height = (sortedArray[j] / Math.max(...array)) * maxHeight;
@@ -141,9 +145,10 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas for the next iteration
             }
 
-            // Final sorted array
-            const finalHeight = sortedArray.map(num => (num / Math.max(...array)) * maxHeight);
-            finalHeight.forEach((height, index) => {
+            // Final sorted array visualization
+            const finalSortedArray = sortFunction(currentArray); // Get the final sorted array
+            finalSortedArray.forEach((num, index) => {
+                const height = (num / Math.max(...array)) * maxHeight;
                 const x = index * width;
                 const y = maxHeight - height;
                 ctx.fillStyle = "green"; // Color for the final sorted bars
