@@ -48,10 +48,17 @@
     <!-- Main Content -->
     <div class="container my-5">
         <h2 class="text-center">Selection Sort Visualization</h2>
-        <p class="text-center">Click "Start Selection Sort" to begin the visualization.</p>
+        <p class="text-center">Input numbers separated by commas (e.g., 5, 2, 8, 4) and click "Start Selection Sort".</p>
 
+        <!-- User Input Section -->
+        <div class="text-center mb-3">
+            <input id="userInput" class="form-control w-50 mx-auto" type="text" placeholder="Enter numbers separated by commas">
+        </div>
+
+        <!-- Buttons -->
         <div class="text-center mb-3">
             <button class="btn btn-primary" onclick="startSelectionSort()">Start Selection Sort</button>
+            <button class="btn btn-secondary" onclick="resetGraph()">Reset Graph</button>
         </div>
 
         <!-- Side-by-side layout -->
@@ -79,8 +86,7 @@
         const canvas = document.getElementById("visualizationCanvas");
         const ctx = canvas.getContext("2d");
 
-        // Initial array for sorting
-        let array = [5, 2, 8, 4, 3, 7, 6, 1];
+        let array = []; // Initial empty array
 
         // Function to draw the array as bars on the canvas
         function drawArray() {
@@ -134,11 +140,27 @@
 
         // Start Selection Sort Visualization
         function startSelectionSort() {
+            const userInput = document.getElementById("userInput").value;
+            // Parse the user input into an array of numbers
+            array = userInput.split(',').map(num => parseInt(num.trim(), 10));
+
+            if (array.some(isNaN)) {
+                alert("Please enter a valid comma-separated list of numbers.");
+                return;
+            }
+
             drawArray(); // Initial drawing of the array
             selectionSort(); // Start the sorting process
         }
 
-        // Initial array rendering
+        // Reset the graph to initial state
+        function resetGraph() {
+            document.getElementById("userInput").value = ''; // Clear the input field
+            array = []; // Clear the array
+            drawArray(); // Redraw empty graph
+        }
+
+        // Initial empty graph rendering
         drawArray();
     </script>
 </body>
