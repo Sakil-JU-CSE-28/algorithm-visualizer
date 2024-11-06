@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selection Sort Visualization</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #visualizationCanvas {
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #0d6efd;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Algorithm Visualizer</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="sorting.html">Sorting</a></li>
+                    <li class="nav-item"><a class="nav-link" href="searching.html">Searching</a></li>
+                    <li class="nav-item"><a class="nav-link" href="graph.html">Graph</a></li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search algorithms..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <h2 class="text-center">Selection Sort Visualization</h2>
+        <p class="text-center">Click "Start Selection Sort" to begin the visualization.</p>
+
+        <div class="text-center mb-3">
+            <button class="btn btn-primary" onclick="startSelectionSort()">Start Selection Sort</button>
+        </div>
+
+        <!-- Side-by-side layout -->
+        <div class="row">
+            <!-- Visualization Canvas Column -->
+            <div class="col-md-8">
+                <canvas id="visualizationCanvas" width="600" height="400"></canvas>
+            </div>
+
+            <!-- Node Visitation List Column -->
+            <div class="col-md-4">
+                <h4>Array Elements</h4>
+                <ul id="nodeList" class="list-group"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2024 Algorithm Visualizer | Created by Md. Sakil Ahmed</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const canvas = document.getElementById("visualizationCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Initial array for sorting
+        let array = [5, 2, 8, 4, 3, 7, 6, 1];
+
+        // Function to draw the array as bars on the canvas
+        function drawArray() {
+            const barWidth = canvas.width / array.length;
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before redrawing
+
+            for (let i = 0; i < array.length; i++) {
+                const barHeight = (array[i] / Math.max(...array)) * canvas.height; // Normalize bar height based on max value
+                ctx.fillStyle = 'blue';
+                ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth, barHeight);
+                ctx.fillStyle = 'white';
+                ctx.fillText(array[i], i * barWidth + barWidth / 4, canvas.height - barHeight - 10);
+            }
+        }
+
+        // Function to swap two elements in the array and play voice notification
+        function swapElements(i, j) {
+            [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+
+            // Play voice notification
+            const utterance = new SpeechSynthesisUtterance(`Swapping ${array[i]} and ${array[j]}`);
+            speechSynthesis.speak(utterance);
+
+            drawArray(); // Redraw the array after swap
+        }
+
+        // Function to perform the selection sort algorithm with visualization
+        async function selectionSort() {
+            for (let i = 0; i < array.length - 1; i++) {
+                let minIndex = i;
+
+                // Find the minimum element in the unsorted part of the array
+                for (let j = i + 1; j < array.length; j++) {
+                    if (array[j] < array[minIndex]) {
+                        minIndex = j;
+                    }
+                }
+
+                // If minIndex is not i, swap the elements and update the display
+                if (minIndex !== i) {
+                    swapElements(i, minIndex);
+                }
+
+                // Add delay to visualize the sorting process
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+
+            // Final sorted array display
+            drawArray();
+        }
+
+        // Start Selection Sort Visualization
+        function startSelectionSort() {
+            drawArray(); // Initial drawing of the array
+            selectionSort(); // Start the sorting process
+        }
+
+        // Initial array rendering
+        drawArray();
+    </script>
+</body>
+</html>
