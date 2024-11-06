@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floyd-Warshall Visualization</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #visualizationCanvas {
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #0d6efd;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        #matrix {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+        }
+
+        .matrix-cell {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Algorithm Visualizer</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="sorting.html">Sorting</a></li>
+                    <li class="nav-item"><a class="nav-link" href="searching.html">Searching</a></li>
+                    <li class="nav-item"><a class="nav-link" href="graph.html">Graph</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <h2 class="text-center">Floyd-Warshall Algorithm Visualization</h2>
+        <p class="text-center">Click "Run Floyd-Warshall" to see the shortest paths between all nodes.</p>
+
+        <div class="text-center mb-3">
+            <button class="btn btn-primary" onclick="runFloydWarshall()">Run Floyd-Warshall</button>
+        </div>
+
+        <!-- Visualization Canvas for graph layout -->
+        <div class="row">
+            <div class="col-md-8">
+                <canvas id="visualizationCanvas" width="600" height="400"></canvas>
+            </div>
+
+            <!-- Matrix representation of shortest paths -->
+            <div class="col-md-4">
+                <h4>Distance Matrix</h4>
+                <div id="matrix"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2024 Algorithm Visualizer | Created by Md. Sakil Ahmed</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const canvas = document.getElementById("visualizationCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const nodes = [
+            { id: 0, x: 100, y: 200 },
+            { id: 1, x: 200, y: 100 },
+            { id: 2, x: 200, y: 300 },
+            { id: 3, x: 300, y: 100 },
+            { id: 4, x: 300, y: 300 },
+            { id: 5, x: 400, y: 200 },
+        ];
+
+        const edges = [
+            { from: 0, to: 1, weight: 2 },
+            { from: 0, to: 2, weight: 4 },
+            { from: 1, to: 3, weight: 7 },
+            { from: 2, to: 4, weight: 3 },
+            { from: 3, to: 5, weight: 1 },
+            { from: 4, to: 5, weight: 5 },
+        ];
+
+        const distances = Array.from({ length: nodes.length }, () => Array(nodes.length).fill(Infinity));
+
+        // Initialize distances
+        edges.forEach(edge => {
+            distances[edge.from][edge.to] = edge.weight;
+            distances[edge.to][edge.from] = edge.weight; // If undirected graph
+        });
+
+        for (let i = 0; i < nodes.length; i++) {
+            distances[i][i] = 0;
+        }
+
+        // Function to draw nodes and edges
+        function drawGraph() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            edges.forEach(edge => drawEdge(edge));
+            nodes.forEach(node => drawNode(node));
+        }
+
+        function drawNode(node) {
+            ctx.fillStyle = "blue";
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 20, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = "white";
+            ctx.fillText(node.id, node.x - 5, node.y + 5);
+        }
+
+        function drawEdge(edge) {
+            const fromNode = nodes[edge.from];
+            const toNode = nodes[edge.to];
+            ctx.strokeStyle = "black";
+            ctx.beginPath();
+            ctx.moveTo(fromNode.x, fromNode.y);
+            ctx.lineTo(toNode.x, toNode.y);
+            ctx.stroke();
+            const midX = (fromNode.x + toNode.x) / 2;
+            const midY = (fromNode.y + toNode.y) / 2;
+            ctx.fillText(edge.weight, midX, midY);
+        }
+
+        // Update the matrix display
+        function updateMatrixDisplay() {
+            const matrixDiv = document.getElementById("matrix");
+            matrixDiv.innerHTML = ""; // Clear the current matrix
+
+            distances.forEach(row => {
+                row.forEach(value => {
+                    const cell = document.createElement("div");
+                    cell.className = "matrix-cell";
+                    cell.textContent = value === Infinity ? "∞" : value;
+                    matrixDiv.appendChild(cell);
+                });
+            });
+        }
+
+        // Floyd-Warshall Algorithm
+        async function floydWarshall() {
+            for (let k = 0; k < nodes.length; k++) {
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = 0; j < nodes.length; j++) {
+                        if (distances[i][j] > distances[i][k] + distances[k][j]) {
+                            distances[i][j] = distances[i][k] + distances[k][j];
+                            updateMatrixDisplay(); // Update matrix after each change
+                            await new Promise(resolve => setTimeout(resolve, 500)); // Delay for visualization
+                        }
+                    }
+                }
+            }
+        }
+
+        function runFloydWarshall() {
+            drawGraph();
+            updateMatrixDisplay();
+            floydWarshall();
+        }
+
+        drawGraph(); // Initial render of the graph
+    </script>
+</body>
+</html>
