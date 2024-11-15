@@ -16,3 +16,22 @@ main {
 .footer {
     /* The footer will sit below the content but will be visible at the bottom */
 }
+
+.scrolling-text {
+    overflow: hidden;
+    white-space: nowrap;
+    color: green; /* Set text color to green */
+    background-color: #f8f9fa;
+    width: 100%;
+    animation: scroll-left 20s linear infinite;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+

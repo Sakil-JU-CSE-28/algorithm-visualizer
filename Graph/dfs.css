@@ -1,0 +1,14 @@
+  #visualizationCanvas {
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #0d6efd;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }

@@ -3,48 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algorithm Visualizer</title>
+    <title>Floyd-Warshall Visualization</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="FloyedWarshall.css" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">Algorithm Visualizer</a>
+            <a class="navbar-brand" href="/index.html">Algorithm Visualizer</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="Sorting/sorting.html">Sorting</a></li>
+                   <li class="nav-item"><a class="nav-link" href="Sorting/sorting.html">Sorting</a></li>
                     <li class="nav-item"><a class="nav-link" href="Searching/searching.html">Searching</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Graph/graph.html">Graph</a></li>
+                    <li class="nav-item"><a class="nav-link" href="graph.html">Graph</a></li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search algorithms..." aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="container my-5 flex-grow-1 text-center">
-        <h2>Welcome to Algorithm Visualizer</h2>
-        <p>This site provides interactive visualizations for various algorithms, including sorting, searching, and graph algorithms.</p>
-        
-        <div class="scrolling-text">
-            <p class="text-muted"><strong>Latest Updates:</strong> New algorithms added in Sorting and Graph sections!</p>
+    <div class="container my-5">
+        <h2 class="text-center">Floyd-Warshall Algorithm Visualization</h2>
+        <p class="text-center">Click "Run Floyd-Warshall" to see the shortest paths between all nodes.</p>
+
+        <div class="text-center mb-3">
+            <button class="btn btn-primary" onclick="runFloydWarshall()">Run Floyd-Warshall</button>
         </div>
-    </main>
+
+        <!-- Visualization Canvas for graph layout -->
+        <div class="row">
+            <div class="col-md-8">
+                <canvas id="visualizationCanvas" width="600" height="400"></canvas>
+            </div>
+
+            <!-- Matrix representation of shortest paths -->
+            <div class="col-md-4">
+                <h4>Distance Matrix</h4>
+                <div id="matrix"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
-    <footer class="footer bg-primary text-white text-center py-3 mt-auto">
+    <footer class="footer">
         <p>© 2024 Algorithm Visualizer | Created by Md. Sakil Ahmed</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="FloyedWarshall.js">
+    </script>
 </body>
 </html>
